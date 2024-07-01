@@ -2,33 +2,65 @@
 devant implementer la grille de jeu"""
 
 from random import randrange
+
 # orientation de la grille selon les vues
 NORD, EST, SUD, OUEST = 0, 1, 2, 3
 def create(lin, col, init):
-    """ Retourne une liste de ``lin`` listes de ``col`` valeurs ``init``."""
+    """
+        Retourne une grille de `lin` lignes de `col` colonnes avec des valeurs `init`.
+
+        :param lin: Nombre de lignes de la grille.
+        :param col: Nombre de colonnes de la grille.
+        :param init: Valeur initiale pour chaque élément de la grille.
+        :return: Une grille de dimensions `lin` x `col` avec des valeurs `init`.
+        """
     return [[init] * col for _ in range(lin)]
 def create_alea(lin, col, mini=10, maxi=100):
-    """Retourne une liste de ``lin`` listes de ``col`` valeurs dans [``mini``, ``maxi``[."""
+    """Retourne une grille de dimensions 'lin', de nombres de colonnes 'col' avec des valeurs aléatoires
+    comprises entre min et max."""
     return [[randrange(mini, maxi) for _ in range(col)] for _ in range(lin)]
 
 def create_alea_lettres(lig,col):
+    """
+        Retourne une grille de dimensions `lig` x `col` avec des lettres majuscules aléatoires.
+
+        :param lig: Nombre de lignes de la grille.
+        :param col: Nombre de colonnes de la grille.
+        :return: Une grille de dimensions `lig` x `col` avec des lettres majuscules aléatoires.
+        """
     tab = create_alea(lig,col,65,90)
     for line in tab:
         for i in range(len(line)):
             line[i] = chr(line[i])
     return tab
 def shape(tab):
-    """ permet de donner  la forme de ``tab``."""
-    nb_lig = len(tab)
+    """
+        Retourne les dimensions de la grille `tab`.
+
+        :param tab: Une grille (liste de listes).
+        :return: Un tuple (nb_lig, nb_col) représentant le nombre de lignes et de colonnes.
+        """
+    nb_lig = len(tab)  # la taille de la grille
     nb_col = len(tab[0]) if nb_lig else 0
     return nb_lig, nb_col
 def line_str(tab, i):
-    """affiche proprement la ligne ``i`` de ``tab``."""
+    """
+        Retourne une chaîne de caractères représentant la ligne `i` de la grille `tab`.
+
+        :param tab: Une grille (liste de listes).
+        :param i: Index de la ligne à afficher.
+        :return: Une chaîne formatée représentant la ligne `i`.
+        """
     return '|\t' + '\t'.join(str(val) for val in tab[i]) + '\t|'
 
 
 def to_str(tab):
-    """affiche proprement ``tab``."""
+    """
+     Retourne une chaîne de caractères représentant la grille `tab`.
+
+     :param tab: Une grille (liste de listes).
+     :return: Une chaîne formatée représentant la grille.
+     """
     res = ''
     for i in range(len(tab)):
         res += '\n' + line_str(tab, i)
@@ -36,52 +68,101 @@ def to_str(tab):
 
 
 def line(tab, i):
-    """extrait la ième ligne de ``tab``."""
+    """
+       Retourne la ligne `i` de la grille `tab`.
+
+       :param tab: Une grille (liste de listes).
+       :param i: Index de la ligne à extraire.
+       :return: La ligne `i` de la grille.
+       """
     return tab[i]
 
 
 def column(tab, j):
-    """extrait la ième colonne de ``tab``."""
+    """
+       Retourne la colonne `j` de la grille `tab`.
+
+       :param tab: Une grille (liste de listes).
+       :param j: Index de la colonne à extraire.
+       :return: La colonne `j` de la grille sous forme de liste.
+       """
     return [line[j] for line in tab]
 
 
 def diago(tab):
-    """extrait la diagonale de ``tab``."""
+    """
+       Retourne la diagonale principale de la grille `tab`.
+
+       :param tab: Une grille (liste de listes).
+       :return: La diagonale principale de la grille sous forme de liste.
+       """
     nb_lig, nb_col = shape(tab)
     size = min(nb_lig, nb_col)
     return [tab[i][i] for i in range(size)]
 
 
 def anti_diago(tab):
-    """extrait l'antidiagonale de ``tab``."""
+    """
+        Retourne l'antidiagonale de la grille `tab`.
+
+        :param tab: Une grille (liste de listes).
+        :return: L'antidiagonale de la grille sous forme de liste.
+        """
     nb_lig, nb_col = shape(tab)
     size = min(nb_lig, nb_col)
     return [tab[i][nb_col - i - 1] for i in range(size)]
 
 
 def identite(tab, val):
-    """ teste si toutes les valeurs de ``tab`` sont de ``val``."""
+    """
+        Vérifie si toutes les valeurs de la grille `tab` sont égales à `val`.
+
+        :param tab: Une grille (liste de listes).
+        :param val: Valeur à comparer.
+        :return: True si toutes les valeurs de `tab` sont égales à `val`, False sinon.
+        """
     return all([all([i == val for i in line]) for line in tab])
 
 
 def is_square(tab):
-    """teste si ``tab`` a le même nombre de lignes et de colonnes."""
+    """
+       Vérifie si la grille `tab` est carrée (même nombre de lignes et de colonnes).
+
+       :param tab: Une grille (liste de listes).
+       :return: True si `tab` est carrée, False sinon.
+       """
     nb_lig, nb_col = shape(tab)
     return nb_lig == nb_col
 
 
 def count(tab, val):
-    """compte le nombre d'occurrences de ``val`` dans ``tab``"""
+    """
+     Compte le nombre d'occurrences de `val` dans la grille `tab`.
+
+     :param tab: Une grille (liste de listes).
+     :param val: Valeur à compter.
+     :return: Le nombre d'occurrences de `val` dans `tab`.
+     """
     return sum(line.count(val) for line in tab)
 
 
 def add(tab):
-    """fait la somme de tous les élements de ``tab``"""
+    """
+       Calcule la somme de tous les éléments de la grille `tab`.
+
+       :param tab: Une grille (liste de listes).
+       :return: La somme de tous les éléments de `tab`.
+       """
     return sum(sum(line) for line in tab)
 
 
 def case_to_lc(tab, num_case):
-    """converti un numéro de case ``num_case`` de ``tab`` vers les coordonnées (ligne, colonne)  correspondants."""
+    """
+       Convertit des coordonnées (num_lig, num_col) en numéro de case correspondant.
+
+       :param tab: Une grille (liste de listes).
+       :param num_lig: Numéro de la ligne.
+       :param num_col: Numéro de la colonne."""
     _, nb_col = shape(tab)
     return num_case // nb_col, num_case % nb_col
 

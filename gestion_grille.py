@@ -1,6 +1,6 @@
 """programme devant assurer la gestion de la grille"""
 
-import grille_base as gb
+import grille as gb
 from random import randint
 import pygame
 
